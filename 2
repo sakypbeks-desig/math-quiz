@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Math Learning Hub</title>
+    <!-- Подключение библиотеки Chart.js для отрисовки финального графика результатов -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --danger: #ef4444;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--background);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e1b4b;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .topic-grid { grid-template-columns: 1fr; }
+        }
+
+        .category-box {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .category-box h3 {
+            margin-top: 0;
+            color: #312e81;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 8px;
+        }
+
+        .menu-btn {
+            display: block;
+            width: 100%;
+            background: white;
+            color: var(--text-main);
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .menu-btn:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+            color: var(--primary);
+        }
+
+        /* Квиз зона */
+        .quiz-card { display: none; }
+
+        /* Прогресс-бар */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            padding: 12px 20px;
+            border-radius: 12px;
+        }
+
+        .progress-bar-wrapper {
+            flex-grow: 1;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .correct { background-color: #d1fae5 !important; color: #065f46 !important; border-color: #34d399 !important; }
+        .wrong { background-color: #fee2e2 !important; color: #991b1b !important; border-color: #f87171 !important; }
+
+        .panel {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            line-height: 1.6;
+        }
+
+        .explanation-panel {
+            border-left: 5px solid var(--danger);
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .success-panel {
+            border-left: 5px solid var(--success);
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .next-btn {
+            margin-top: 25px;
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+        }
+
+        .next-btn:hover { background: var(--primary-hover); }
+
+        /* Результаты */
+        .results-screen { display: none; text-align: center; }
+        .chart-container { max-width: 300px; margin: 30px auto; }
+        .back-btn {
+            background: #64748b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="main-menu">
+        <h1>🌌 Advanced Math Hub</h1>
+        <div class="topic-grid">
+            <!-- Раздел АЛГЕБРА -->
+            <div class="category-box">
+                <h3>🧮 Algebra & Functions</h3>
+                <button class="menu-btn" onclick="startQuiz('linear')">Grade 7: Linear Equations</button>
+                <button class="menu-btn" onclick="startQuiz('powers')">Grade 7: Exponent Rules</button>
+                <button class="menu-btn" onclick="startQuiz('quad')">Grade 8: Quadratic Equations</button>
+                <button class="menu-btn" onclick="startQuiz('prog')">Grade 9: Arithmetic Progressions</button>
+                <button class="menu-btn" onclick="startQuiz('logs')">Grade 9: Logarithm Basics</button>
+            </div>
+            
+            <!-- Раздел ГЕОМЕТРИЯ -->
+            <div class="category-box">
+                <h3>📐 Geometry & Shapes</h3>
+                <button class="menu-btn" onclick="startQuiz('angles')">Grade 7: Angles & Lines</button>
+                <button class="menu-btn" onclick="startQuiz('pythag')">Grade 8: Pythagorean Theorem</button>
+                <button class="menu-btn" onclick="startQuiz('areas')">Grade 8: Areas of Polygons</button>
+                <button class="menu-btn" onclick="startQuiz('circles')">Grade 9: Circle Theorems</button>
+                <button class="menu-btn" onclick="startQuiz('vectors')">Grade 9: Vectors & Coordinates</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Игровая зона квиза -->
+    <div id="quiz-zone" class="quiz-card">
+        <div class="progress-container">
+            <span id="progress-text" style="font-weight: 600; color: var(--text-muted);">Question 1 of 10</span>
+            <div class="progress-bar-wrapper">
+                <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+            <span id="score-counter" style="font-weight: 600; color: var(--success);">Score: 0</span>
+        </div>
+
+        <div class="question-text" id="question-field">Loading...</div>
+        <div class="options-grid" id="options-field"></div>
+
+        <div class="panel success-panel" id="correct-panel">🎯 Correct! Excellent solution.</div>
+        <div class="panel explanation-panel" id="wrong-panel"></div>
+
+        <button class="next-btn" id="next-question-btn" onclick="nextQuestion()">Next Question ➡️</button>
+    </div>
+
+    <!-- Экран результатов с графиком -->
+    <div id="results-zone" class="results-screen">
+        <h2>📊 Training Session Completed!</h2>
+        <p style="font-size: 1.2rem; color: var(--text-muted);" id="final-score-text"></p>
+        
+        <div class="chart-container">
+            <canvas id="resultsChart"></canvas>
+        </div>
+
+        <button class="back-btn" onclick="showMenu()">↩️ Back to Menu</button>
+    </div>
+</div>
+
+<script>
+let currentCategory = '';
+let currentQuestionIndex = 0;
+let score = 0;
+let totalQuestions = 10;
+let currentCorrectAnswer = '';
+let currentExplanation = '';
+let chartInstance = null;
+
+function getRandom(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+
+// Генератор уникальных динамических вопросов на основе темы
+function generateQuestion(category) {
+    let question = '', correctAnswer = '', explanation = '', wrongs = [];
+    
+    let a = getRandom(2, 9);
+    let b = getRandom(3, 12);
+
+    switch(category) {
+        case 'linear':
+            let ansLinear = getRandom(1, 10);
+            let bLinear = a * ansLinear;
+            question = `Solve for x: ${a}x - ${b} = ${bLinear - b}`;
+            correctAnswer = `x = ${ansLinear}`;
+            explanation = `Step 1: Add ${b} to both sides: ${a}x = ${bLinear}.<br>Step 2: Divide both sides by ${a}: x = ${bLinear} / ${a} = ${ansLinear}.`;
+            wrongs = [`x = ${ansLinear + 2}`, `x = ${ansLinear - 1}`, `x = ${a}`];
+            break;
+
+        case 'powers':
+            let base = getRandom(2, 5);
+            let p1 = getRandom(4, 7);
+            let p2 = getRandom(2, 3);
+            question = `Simplify and calculate: (${base}<sup>${p1}</sup>)<sup>${p2}</sup> / ${base}<sup>${p1*p2 - 2}</sup>`;
