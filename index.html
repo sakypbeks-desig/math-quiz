@@ -1,11 +1,15 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Advanced Math Learning Hub</title>
-    <!-- Подключение библиотеки Chart.js для отрисовки финального графика результатов -->
-    <script src="https://jsdelivr.net"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
             --primary: #4f46e5;
@@ -16,6 +20,10 @@
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
@@ -32,7 +40,9 @@
             background: var(--card-bg);
             padding: 35px;
             border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.05),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         h1 {
@@ -51,7 +61,9 @@
         }
 
         @media (max-width: 600px) {
-            .topic-grid { grid-template-columns: 1fr; }
+            .topic-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .category-box {
@@ -90,10 +102,10 @@
             color: var(--primary);
         }
 
-        /* Квиз зона */
-        .quiz-card { display: none; }
+        .quiz-card {
+            display: none;
+        }
 
-        /* Прогресс-бар */
         .progress-container {
             display: flex;
             align-items: center;
@@ -134,7 +146,9 @@
         }
 
         @media (max-width: 600px) {
-            .options-grid { grid-template-columns: 1fr; }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .option-btn {
@@ -154,8 +168,21 @@
             background: #f8fafc;
         }
 
-        .correct { background-color: #d1fae5 !important; color: #065f46 !important; border-color: #34d399 !important; }
-        .wrong { background-color: #fee2e2 !important; color: #991b1b !important; border-color: #f87171 !important; }
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .correct {
+            background-color: #d1fae5 !important;
+            color: #065f46 !important;
+            border-color: #34d399 !important;
+        }
+
+        .wrong {
+            background-color: #fee2e2 !important;
+            color: #991b1b !important;
+            border-color: #f87171 !important;
+        }
 
         .panel {
             margin-top: 25px;
@@ -191,11 +218,20 @@
             display: none;
         }
 
-        .next-btn:hover { background: var(--primary-hover); }
+        .next-btn:hover {
+            background: var(--primary-hover);
+        }
 
-        /* Результаты */
-        .results-screen { display: none; text-align: center; }
-        .chart-container { max-width: 300px; margin: 30px auto; }
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .chart-container {
+            max-width: 300px;
+            margin: 30px auto;
+        }
+
         .back-btn {
             background: #64748b;
             color: white;
@@ -206,99 +242,911 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        .back-btn:hover {
+            background: #475569;
+        }
     </style>
 </head>
+
 <body>
 
 <div class="container">
+
+    <!-- MAIN MENU -->
     <div id="main-menu">
+
         <h1>🌌 Advanced Math Hub</h1>
+
         <div class="topic-grid">
-            <!-- Раздел АЛГЕБРА -->
+
+            <!-- ALGEBRA -->
             <div class="category-box">
+
                 <h3>🧮 Algebra & Functions</h3>
-                <button class="menu-btn" onclick="startQuiz('linear')">Grade 7: Linear Equations</button>
-                <button class="menu-btn" onclick="startQuiz('powers')">Grade 7: Exponent Rules</button>
-                <button class="menu-btn" onclick="startQuiz('quad')">Grade 8: Quadratic Equations</button>
-                <button class="menu-btn" onclick="startQuiz('prog')">Grade 9: Arithmetic Progressions</button>
-                <button class="menu-btn" onclick="startQuiz('logs')">Grade 9: Logarithm Basics</button>
+
+                <button class="menu-btn" onclick="startQuiz('linear')">
+                    Grade 7: Linear Equations
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('powers')">
+                    Grade 7: Exponent Rules
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('quad')">
+                    Grade 8: Quadratic Equations
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('prog')">
+                    Grade 9: Arithmetic Progressions
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('logs')">
+                    Grade 9: Logarithm Basics
+                </button>
+
             </div>
-            
-            <!-- Раздел ГЕОМЕТРИЯ -->
+
+            <!-- GEOMETRY -->
             <div class="category-box">
+
                 <h3>📐 Geometry & Shapes</h3>
-                <button class="menu-btn" onclick="startQuiz('angles')">Grade 7: Angles & Lines</button>
-                <button class="menu-btn" onclick="startQuiz('pythag')">Grade 8: Pythagorean Theorem</button>
-                <button class="menu-btn" onclick="startQuiz('areas')">Grade 8: Areas of Polygons</button>
-                <button class="menu-btn" onclick="startQuiz('circles')">Grade 9: Circle Theorems</button>
-                <button class="menu-btn" onclick="startQuiz('vectors')">Grade 9: Vectors & Coordinates</button>
+
+                <button class="menu-btn" onclick="startQuiz('angles')">
+                    Grade 7: Angles & Lines
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('pythag')">
+                    Grade 8: Pythagorean Theorem
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('areas')">
+                    Grade 8: Areas of Polygons
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('circles')">
+                    Grade 9: Circle Theorems
+                </button>
+
+                <button class="menu-btn" onclick="startQuiz('vectors')">
+                    Grade 9: Vectors & Coordinates
+                </button>
+
             </div>
+
         </div>
     </div>
 
-    <!-- Игровая зона квиза -->
+    <!-- QUIZ -->
     <div id="quiz-zone" class="quiz-card">
+
         <div class="progress-container">
-            <span id="progress-text" style="font-weight: 600; color: var(--text-muted);">Question 1 of 10</span>
+
+            <span
+                id="progress-text"
+                style="font-weight: 600; color: var(--text-muted);">
+                Question 1 of 10
+            </span>
+
             <div class="progress-bar-wrapper">
                 <div id="progress-bar" class="progress-bar-fill"></div>
             </div>
-            <span id="score-counter" style="font-weight: 600; color: var(--success);">Score: 0</span>
+
+            <span
+                id="score-counter"
+                style="font-weight: 600; color: var(--success);">
+                Score: 0
+            </span>
+
         </div>
 
-        <div class="question-text" id="question-field">Loading...</div>
-        <div class="options-grid" id="options-field"></div>
+        <div
+            class="question-text"
+            id="question-field">
+            Loading...
+        </div>
 
-        <div class="panel success-panel" id="correct-panel">🎯 Correct! Excellent solution.</div>
-        <div class="panel explanation-panel" id="wrong-panel"></div>
+        <div
+            class="options-grid"
+            id="options-field">
+        </div>
 
-        <button class="next-btn" id="next-question-btn" onclick="nextQuestion()">Next Question ➡️</button>
+        <!-- CORRECT -->
+        <div
+            class="panel success-panel"
+            id="correct-panel">
+            🎯 Correct! Excellent solution.
+        </div>
+
+        <!-- WRONG -->
+        <div
+            class="panel explanation-panel"
+            id="wrong-panel">
+        </div>
+
+        <button
+            class="next-btn"
+            id="next-question-btn"
+            onclick="nextQuestion()">
+            Next Question ➡️
+        </button>
+
     </div>
 
-    <!-- Экран результатов с графиком -->
-    <div id="results-zone" class="results-screen">
+    <!-- RESULTS -->
+    <div
+        id="results-zone"
+        class="results-screen">
+
         <h2>📊 Training Session Completed!</h2>
-        <p style="font-size: 1.2rem; color: var(--text-muted);" id="final-score-text"></p>
-        
+
+        <p
+            style="font-size: 1.2rem; color: var(--text-muted);"
+            id="final-score-text">
+        </p>
+
         <div class="chart-container">
             <canvas id="resultsChart"></canvas>
         </div>
 
-        <button class="back-btn" onclick="showMenu()">↩️ Back to Menu</button>
+        <button
+            class="back-btn"
+            onclick="showMenu()">
+            ↩️ Back to Menu
+        </button>
+
     </div>
+
 </div>
 
 <script>
+
 let currentCategory = '';
 let currentQuestionIndex = 0;
 let score = 0;
 let totalQuestions = 10;
+
 let currentCorrectAnswer = '';
 let currentExplanation = '';
+
 let chartInstance = null;
 
-function getRandom(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
-// Генератор уникальных динамических вопросов на основе темы
+// =========================
+// RANDOM NUMBER
+// =========================
+
+function getRandom(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+// =========================
+// SHUFFLE
+// =========================
+
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+
+// =========================
+// GENERATE QUESTION
+// =========================
+
 function generateQuestion(category) {
-    let question = '', correctAnswer = '', explanation = '', wrongs = [];
-    
+
+    let question = '';
+    let correctAnswer = '';
+    let explanation = '';
+    let wrongs = [];
+
     let a = getRandom(2, 9);
     let b = getRandom(3, 12);
 
-    switch(category) {
+
+    switch (category) {
+
+        // =========================
+        // LINEAR EQUATIONS
+        // =========================
+
         case 'linear':
+
             let ansLinear = getRandom(1, 10);
             let bLinear = a * ansLinear;
-            question = `Solve for x: ${a}x - ${b} = ${bLinear - b}`;
-            correctAnswer = `x = ${ansLinear}`;
-            explanation = `Step 1: Add ${b} to both sides: ${a}x = ${bLinear}.<br>Step 2: Divide both sides by ${a}: x = ${bLinear} / ${a} = ${ansLinear}.`;
-            wrongs = [`x = ${ansLinear + 2}`, `x = ${ansLinear - 1}`, `x = ${a}`];
+
+            question =
+                `Solve for x: ${a}x - ${b} = ${bLinear - b}`;
+
+            correctAnswer =
+                `x = ${ansLinear}`;
+
+            explanation =
+                `Step 1: Add ${b} to both sides:
+                ${a}x = ${bLinear}.<br>
+                
+                Step 2: Divide both sides by ${a}:
+                x = ${bLinear} / ${a} = ${ansLinear}.`;
+
+            wrongs = [
+                `x = ${ansLinear + 2}`,
+                `x = ${ansLinear - 1}`,
+                `x = ${a}`
+            ];
+
             break;
 
+
+        // =========================
+        // POWERS
+        // =========================
+
         case 'powers':
+
             let base = getRandom(2, 5);
             let p1 = getRandom(4, 7);
             let p2 = getRandom(2, 3);
-            question = `Simplify and calculate: (${base}<sup>${p1}</sup>)<sup>${p2}</sup> / ${base}<sup>${p1*p2 - 2}</sup>`;
+
+            question =
+                `Simplify and calculate:
+                (${base}<sup>${p1}</sup>)<sup>${p2}</sup>
+                / ${base}<sup>${p1 * p2 - 2}</sup>`;
+
+            correctAnswer =
+                `${Math.pow(base, 2)}`;
+
+            explanation =
+                `According to exponent rules:
+                (a<sup>m</sup>)<sup>n</sup> = a<sup>m·n</sup>.<br><br>
+
+                (${base}<sup>${p1}</sup>)<sup>${p2}</sup>
+                =
+                ${base}<sup>${p1 * p2}</sup>.<br><br>
+
+                When dividing powers with the same base,
+                subtract the exponents:
+
+                ${p1 * p2} - (${p1 * p2 - 2}) = 2.<br><br>
+
+                Thus:
+
+                ${base}<sup>2</sup>
+                =
+                ${Math.pow(base, 2)}.`;
+
+            wrongs = [
+                `${Math.pow(base, 3)}`,
+                `${base}`,
+                `1`
+            ];
+
+            break;
+
+
+        // =========================
+        // QUADRATIC EQUATIONS
+        // =========================
+
+        case 'quad':
+
+            let r1 = getRandom(1, 4);
+            let r2 = getRandom(5, 8);
+
+            let sumB = -(r1 + r2);
+            let prodC = r1 * r2;
+
+            question =
+                `Find the roots of the quadratic equation:
+                x² ${sumB >= 0 ? '+ ' + sumB : sumB}x + ${prodC} = 0`;
+
+            correctAnswer =
+                `x = ${r1}, x = ${r2}`;
+
+            explanation =
+                `Using Vieta's formulas, the sum of the roots
+                must equal -b (${ -sumB }) and the product
+                must equal c (${prodC}).<br><br>
+
+                The values ${r1} and ${r2} satisfy these conditions:
+
+                ${r1} + ${r2} = ${-sumB}
+
+                and
+
+                ${r1} · ${r2} = ${prodC}.`;
+
+            wrongs = [
+                `x = -${r1}, x = -${r2}`,
+                `x = ${r1 + 1}, x = ${r2 - 1}`,
+                `x = 0, x = ${prodC}`
+            ];
+
+            break;
+
+
+        // =========================
+        // ARITHMETIC PROGRESSION
+        // =========================
+
+        case 'prog':
+
+            let diff = getRandom(2, 5);
+            let nTerm = getRandom(5, 10);
+
+            let finalAns =
+                a + (nTerm - 1) * diff;
+
+            question =
+                `In an arithmetic progression,
+                the first term a₁ = ${a}
+                and common difference d = ${diff}.
+                Find the value of a<sub>${nTerm}</sub>.`;
+
+            correctAnswer =
+                `${finalAns}`;
+
+            explanation =
+                `The standard formula for the n-th term is:
+
+                a<sub>n</sub> = a₁ + (n - 1)·d.<br><br>
+
+                Substituting the given values:
+
+                a<sub>${nTerm}</sub>
+                =
+                ${a} + (${nTerm} - 1)·${diff}
+
+                =
+                ${a} + ${nTerm - 1}·${diff}
+
+                =
+                ${finalAns}.`;
+
+            wrongs = [
+                `${finalAns - diff}`,
+                `${finalAns + diff}`,
+                `${a + nTerm * diff}`
+            ];
+
+            break;
+
+
+        // =========================
+        // LOGARITHMS
+        // =========================
+
+        case 'logs':
+
+            let logBase = getRandom(2, 4);
+            let power = getRandom(2, 4);
+
+            let arg =
+                Math.pow(logBase, power);
+
+            question =
+                `Evaluate the expression:
+                log<sub>${logBase}</sub>(${arg})`;
+
+            correctAnswer =
+                `${power}`;
+
+            explanation =
+                `By definition,
+                log<sub>b</sub>(x) represents the exponent
+                to which the base b must be raised to produce x.<br><br>
+
+                Since:
+
+                ${logBase}<sup>${power}</sup> = ${arg},
+
+                the logarithm equals ${power}.`;
+
+            wrongs = [
+                `${arg}`,
+                `${power - 1}`,
+                `1`
+            ];
+
+            break;
+
+
+        // =========================
+        // ANGLES
+        // =========================
+
+        case 'angles':
+
+            let givenAngle =
+                getRandom(40, 140);
+
+            let secondAngle =
+                180 - givenAngle;
+
+            question =
+                `Two angles are supplementary
+                (form a straight line).
+
+                If one angle is ${givenAngle}°,
+                find the second angle.`;
+
+            correctAnswer =
+                `${secondAngle}°`;
+
+            explanation =
+                `The sum of supplementary angles
+                is always 180°.<br><br>
+
+                Therefore:
+
+                180° - ${givenAngle}°
+                =
+                ${secondAngle}°.`;
+
+            wrongs = [
+                `${givenAngle}°`,
+                `${90 - Math.round(givenAngle / 2)}°`,
+                `90°`
+            ];
+
+            break;
+
+
+        // =========================
+        // PYTHAGOREAN THEOREM
+        // =========================
+
+        case 'pythag':
+
+            let mult = getRandom(1, 3);
+
+            let leg1 = 3 * mult;
+            let leg2 = 4 * mult;
+
+            let hypotenuse = 5 * mult;
+
+            question =
+                `A right triangle has legs of length
+                ${leg1} cm and ${leg2} cm.
+
+                Calculate the length of the hypotenuse.`;
+
+            correctAnswer =
+                `${hypotenuse} cm`;
+
+            explanation =
+                `By the Pythagorean theorem:
+
+                a² + b² = c².<br><br>
+
+                ${leg1}² + ${leg2}²
+                =
+                ${leg1 * leg1} + ${leg2 * leg2}
+                =
+                ${hypotenuse * hypotenuse}.<br><br>
+
+                Taking the square root:
+
+                c = ${hypotenuse} cm.`;
+
+            wrongs = [
+                `${leg1 + leg2} cm`,
+                `${hypotenuse + 1} cm`,
+                `${hypotenuse * hypotenuse} cm`
+            ];
+
+            break;
+
+
+        // =========================
+        // AREAS
+        // =========================
+
+        case 'areas':
+
+            let baseArea = b;
+            let heightArea = a;
+
+            let area =
+                baseArea * heightArea;
+
+            question =
+                `Find the area of a parallelogram
+                with a base of ${baseArea} cm
+                and a height of ${heightArea} cm.`;
+
+            correctAnswer =
+                `${area} cm²`;
+
+            explanation =
+                `The area of a parallelogram is:
+
+                Area = base · height.<br><br>
+
+                Therefore:
+
+                ${baseArea} · ${heightArea}
+                =
+                ${area} cm².`;
+
+            wrongs = [
+                `${area / 2} cm²`,
+                `${(baseArea + heightArea) * 2} cm²`,
+                `${baseArea + heightArea} cm²`
+            ];
+
+            break;
+
+
+        // =========================
+        // CIRCLES
+        // =========================
+
+        case 'circles':
+
+            let rCircle =
+                7 * getRandom(1, 2);
+
+            let areaCircle =
+                Math.round((22 / 7) * rCircle * rCircle);
+
+            question =
+                `What is the area of a circle
+                with a radius of ${rCircle} cm?
+
+                Take π ≈ 22/7.`;
+
+            correctAnswer =
+                `${areaCircle} cm²`;
+
+            explanation =
+                `The formula for the area of a circle is:
+
+                A = πr².<br><br>
+
+                Substituting r = ${rCircle}:
+
+                A = (22/7) · ${rCircle}²
+
+                = ${areaCircle} cm².`;
+
+            wrongs = [
+                `${rCircle * 2} cm²`,
+                `${rCircle * rCircle} cm²`,
+                `${areaCircle - 15} cm²`
+            ];
+
+            break;
+
+
+        // =========================
+        // VECTORS
+        // =========================
+
+        case 'vectors':
+
+            let v1 = getRandom(1, 4);
+            let v2 = getRandom(2, 5);
+
+            let magnitudeSquared =
+                v1 * v1 + v2 * v2;
+
+            question =
+                `Given vector
+                <b>v</b> = (${v1}, ${v2}).
+
+                Find the magnitude squared
+                of this vector:
+
+                |<b>v</b>|²`;
+
+            correctAnswer =
+                `${magnitudeSquared}`;
+
+            explanation =
+                `The magnitude squared of a vector
+                (x, y) is:
+
+                x² + y².<br><br>
+
+                Therefore:
+
+                ${v1}² + ${v2}²
+                =
+                ${v1 * v1} + ${v2 * v2}
+                =
+                ${magnitudeSquared}.`;
+
+            wrongs = [
+                `${v1 + v2}`,
+                `${v1 * v2}`,
+                `${magnitudeSquared + 4}`
+            ];
+
+            break;
+    }
+
+    return {
+        question,
+        correctAnswer,
+        explanation,
+        wrongs
+    };
+}
+
+
+// =========================
+// START QUIZ
+// =========================
+
+function startQuiz(category) {
+
+    currentCategory = category;
+    currentQuestionIndex = 0;
+    score = 0;
+
+    document.getElementById('main-menu').style.display = 'none';
+
+    document.getElementById('results-zone').style.display = 'none';
+
+    document.getElementById('quiz-zone').style.display = 'block';
+
+    setupQuestion();
+}
+
+
+// =========================
+// SETUP QUESTION
+// =========================
+
+function setupQuestion() {
+
+    document.getElementById('correct-panel').style.display = 'none';
+
+    document.getElementById('wrong-panel').style.display = 'none';
+
+    document.getElementById('next-question-btn').style.display = 'none';
+
+
+    document.getElementById('progress-text').innerText =
+        `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
+
+
+    document.getElementById('progress-bar').style.width =
+        `${((currentQuestionIndex + 1) / totalQuestions) * 100}%`;
+
+
+    document.getElementById('score-counter').innerText =
+        `Score: ${score}`;
+
+
+    let data =
+        generateQuestion(currentCategory);
+
+
+    currentCorrectAnswer =
+        data.correctAnswer;
+
+    currentExplanation =
+        data.explanation;
+
+
+    document.getElementById('question-field').innerHTML =
+        data.question;
+
+
+    let options = [
+        ...data.wrongs,
+        data.correctAnswer
+    ];
+
+
+    options = shuffle(options);
+
+
+    let optionsBox =
+        document.getElementById('options-field');
+
+    optionsBox.innerHTML = '';
+
+
+    options.forEach(opt => {
+
+        let btn =
+            document.createElement('button');
+
+        btn.className = 'option-btn';
+
+        btn.innerHTML = opt;
+
+        btn.onclick = function () {
+            checkAnswer(btn, opt);
+        };
+
+        optionsBox.appendChild(btn);
+
+    });
+}
+
+
+// =========================
+// CHECK ANSWER
+// =========================
+
+function checkAnswer(selectedBtn, selectedVal) {
+
+    let buttons =
+        document.querySelectorAll('.option-btn');
+
+
+    buttons.forEach(b => {
+        b.disabled = true;
+    });
+
+
+    if (selectedVal === currentCorrectAnswer) {
+
+        selectedBtn.classList.add('correct');
+
+        document.getElementById('correct-panel').style.display =
+            'block';
+
+        score++;
+
+        document.getElementById('score-counter').innerText =
+            `Score: ${score}`;
+
+    } else {
+
+        selectedBtn.classList.add('wrong');
+
+
+        buttons.forEach(b => {
+
+            if (b.innerHTML === currentCorrectAnswer) {
+                b.classList.add('correct');
+            }
+
+        });
+
+
+        let wrongBox =
+            document.getElementById('wrong-panel');
+
+
+        wrongBox.innerHTML =
+            `<strong>Incorrect.</strong>
+            The right answer is highlighted in green.
+            <br><br>
+
+            <strong>Explanation:</strong>
+            <br>
+
+            ${currentExplanation}`;
+
+
+        wrongBox.style.display =
+            'block';
+    }
+
+
+    document.getElementById('next-question-btn').style.display =
+        'block';
+}
+
+
+// =========================
+// NEXT QUESTION
+// =========================
+
+function nextQuestion() {
+
+    currentQuestionIndex++;
+
+
+    if (currentQuestionIndex < totalQuestions) {
+
+        setupQuestion();
+
+    } else {
+
+        showResults();
+
+    }
+}
+
+
+// =========================
+// SHOW RESULTS
+// =========================
+
+function showResults() {
+
+    document.getElementById('quiz-zone').style.display =
+        'none';
+
+    document.getElementById('results-zone').style.display =
+        'block';
+
+
+    document.getElementById('final-score-text').innerText =
+        `You answered ${score} out of ${totalQuestions} questions correctly!`;
+
+
+    let ctx =
+        document.getElementById('resultsChart').getContext('2d');
+
+
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+
+    chartInstance =
+        new Chart(ctx, {
+
+            type: 'doughnut',
+
+            data: {
+
+                labels: [
+                    'Correct Answers',
+                    'Incorrect Answers'
+                ],
+
+                datasets: [
+
+                    {
+                        data: [
+                            score,
+                            totalQuestions - score
+                        ],
+
+                        backgroundColor: [
+                            '#10b981',
+                            '#ef4444'
+                        ],
+
+                        borderWidth: 0
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+                        position: 'bottom'
+                    }
+
+                }
+
+            }
+
+        });
+}
+
+
+// =========================
+// BACK TO MENU
+// =========================
+
+function showMenu() {
+
+    document.getElementById('results-zone').style.display =
+        'none';
+
+    document.getElementById('main-menu').style.display =
+        'block';
+}
+
+</script>
+
+</body>
+</html>
+```
